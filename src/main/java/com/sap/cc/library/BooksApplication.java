@@ -1,13 +1,14 @@
-package com.sap.cc.springbootskeleton;
+package com.sap.cc.library;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringBootSkeletonApplication {
+public class BooksApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootSkeletonApplication.class, args);
+
+		SpringApplication.run(BooksApplication.class, args);
 	}
 
 }
