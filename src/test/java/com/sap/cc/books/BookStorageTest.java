@@ -17,123 +17,111 @@ public class BookStorageTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		bookStorage.deleteAllBooks();
+		bookStorage.deleteAll();
 	}
 
 	@Test
-	public void testRetrieveBookByIdNonExistingBook() {
-		Optional<Book> returnedBook = bookStorage.retrieveBookById(1L);
+	public void getNonExistingBook_bookNotPresent() {
+		Optional<Book> returnedBook = bookStorage.get(1L);
 		assertThat(returnedBook.isPresent()).isEqualTo(false);
 	}
 
 	@Test
-	public void testSaveBook() {
-		Book returnedBook = bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
+	public void saveOneBook_returnsTheBook() {
+		Book returnedBook = bookStorage.save(SONG_OF_ICE_AND_FIRE);
 
 		assertThat(returnedBook.getAuthor()).isEqualTo(SONG_OF_ICE_AND_FIRE.getAuthor());
 		assertThat(returnedBook.getId()).isEqualTo(1L);
 	}
 
 	@Test
-	public void testSaveTwoBooks() {
-		bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
+	public void saveTwoBooks_returnsTheSecondBook() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
 
-		Book returnedBook = bookStorage.saveBook(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
+		Book returnedBook = bookStorage.save(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
 
 		assertThat(returnedBook.getAuthor()).isEqualTo(HITCHHIKERS_GUIDE_TO_THE_GALAXY.getAuthor());
 		assertThat(returnedBook.getId()).isEqualTo(2L);
 	}
 
 	@Test
-	public void testSaveBookTryToForceId() {
+	public void saveOneBookTryToForceId_ignoreTheForcedId() {
 		Book book = SONG_OF_ICE_AND_FIRE;
 		book.setId(10L);
-		Book returnedBook = bookStorage.saveBook(book);
+		Book returnedBook = bookStorage.save(book);
 
 		assertThat(returnedBook.getId()).isEqualTo(1L);
 	}
 
 	@Test
-	public void testSaveAndRetrieveBookById() {
-		bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
+	public void oneBook_getById_returnsTheBook() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
 
-		Optional<Book> returnedBook = bookStorage.retrieveBookById(1L);
+		Optional<Book> returnedBook = bookStorage.get(1L);
 
 		assertThat(returnedBook.isPresent()).isEqualTo(true);
 		assertThat(returnedBook.get().getId()).isEqualTo(1L);
 		assertThat(returnedBook.get().getAuthor()).isEqualTo(SONG_OF_ICE_AND_FIRE.getAuthor());
-
 	}
 
 	@Test
-	public void testUpdateTitleOfExistingBook() {
-		Book returnedBook = bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
+	public void oneBook_updateTitle_returnsUpdatedBook() {
+		Book returnedBook = bookStorage.save(SONG_OF_ICE_AND_FIRE);
 		assertThat(returnedBook.getId()).isEqualTo(1L);
 
 		final String newAuthor = "Bruce Schneier";
 		returnedBook.setAuthor(newAuthor);
 
-		bookStorage.saveBook(returnedBook);
+		returnedBook = bookStorage.save(returnedBook);
 
 		assertThat(returnedBook.getAuthor()).isEqualTo(newAuthor);
 		assertThat(returnedBook.getId()).isEqualTo(1L);
-
 	}
 
 	@Test
-	public void testGetAllEmpty() {
-		List<Book> returnedBooks = bookStorage.retrieveAllBooks();
+	public void noBooks_getAll_returnsEmptyList() {
+		List<Book> returnedBooks = bookStorage.getAll();
 		assertThat(returnedBooks.size()).isEqualTo(0);
 	}
 
 	@Test
-	public void testGetAllFirstOneThenTwoEntries() {
+	public void oneBook_getAll_returnsTheBook() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
 
-		bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
-
-		List<Book> returnedBooks = bookStorage.retrieveAllBooks();
+		List<Book> returnedBooks = bookStorage.getAll();
 		assertThat(returnedBooks.size()).isEqualTo(1);
 		assertThat(returnedBooks.iterator().next().getAuthor()).isEqualTo(SONG_OF_ICE_AND_FIRE.getAuthor());
 		assertThat(returnedBooks.iterator().next().getId()).isEqualTo(1L);
-
-		bookStorage.saveBook(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
-
-		returnedBooks = bookStorage.retrieveAllBooks();
-		assertThat(returnedBooks.size()).isEqualTo(2);
-
 	}
 
 	@Test
-	public void testDeleteSingle() {
+	public void twoBooks_getAll_returnsTwoBooks() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
+		bookStorage.save(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
 
-		bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
-		bookStorage.saveBook(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
-
-		List<Book> returnedBooks = bookStorage.retrieveAllBooks();
+		List<Book> returnedBooks = bookStorage.getAll();
 		assertThat(returnedBooks.size()).isEqualTo(2);
+	}
 
-		bookStorage.deleteBook(1L);
+	@Test
+	public void twoBooks_deleteFirst_returnsTheSecond() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
+		bookStorage.save(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
+		bookStorage.delete(1L);
 
-		returnedBooks = bookStorage.retrieveAllBooks();
-
+		List<Book> returnedBooks = bookStorage.getAll();
 		assertThat(returnedBooks.size()).isEqualTo(1);
 		assertThat(returnedBooks.iterator().next().getAuthor()).isEqualTo(HITCHHIKERS_GUIDE_TO_THE_GALAXY.getAuthor());
 		assertThat(returnedBooks.iterator().next().getId()).isEqualTo(2L);
-
 	}
 
 	@Test
-	public void testDeleteAll() {
+	public void twoBooks_deleteAll_returnsEmptyList() {
+		bookStorage.save(SONG_OF_ICE_AND_FIRE);
+		bookStorage.save(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
+		bookStorage.deleteAll();
 
-		bookStorage.saveBook(SONG_OF_ICE_AND_FIRE);
-		bookStorage.saveBook(HITCHHIKERS_GUIDE_TO_THE_GALAXY);
-
-		List<Book> returnedBooks = bookStorage.retrieveAllBooks();
-		assertThat(returnedBooks.size()).isEqualTo(2);
-
-		bookStorage.deleteAllBooks();
-
-		returnedBooks = bookStorage.retrieveAllBooks();
+		List<Book> returnedBooks = bookStorage.getAll();
 		assertThat(returnedBooks.size()).isEqualTo(0);
 	}
 

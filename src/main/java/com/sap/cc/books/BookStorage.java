@@ -5,14 +5,14 @@ import java.util.Optional;
 
 public interface BookStorage {
 
-	public Book saveBook(Book book);
+    public Book save(Book book);
 
-	public Optional<Book> retrieveBookById(Long id);
+    public Optional<Book> get(Long id);
 
-	public List<Book> retrieveAllBooks();
+    public List<Book> getAll();
 
-	public void deleteBook(Long id);
+    public void delete(Long id);
 
-	public void deleteAllBooks();
+    public void deleteAll();
 
 }

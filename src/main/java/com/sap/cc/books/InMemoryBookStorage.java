@@ -14,7 +14,7 @@ public class InMemoryBookStorage implements BookStorage {
 	private final Map<Long, Book> books = new HashMap<>();
 
 	@Override
-	public Book saveBook(final Book book) {
+	public Book save(final Book book) {
 		boolean isBookIdEmptyOrNonExisting = book.getId() == null || !books.containsKey(book.getId());
 
 		if (isBookIdEmptyOrNonExisting) {
@@ -27,23 +27,23 @@ public class InMemoryBookStorage implements BookStorage {
 	}
 
 	@Override
-	public Optional<Book> retrieveBookById(Long id) {
+	public Optional<Book> get(Long id) {
 		return Optional.ofNullable(books.get(id));
 	}
 
 	@Override
-	public List<Book> retrieveAllBooks() {
+	public List<Book> getAll() {
 		ArrayList<Book> returnValue = new ArrayList<Book>(books.values());
 		return returnValue;
 	}
 
 	@Override
-	public void deleteAllBooks() {
+	public void deleteAll() {
 		books.clear();
 	}
 
 	@Override
-	public void deleteBook(Long id) {
+	public void delete(Long id) {
 		books.remove(id);
 	}
 
