@@ -22,4 +22,3 @@ jobs:
            -H 'Accept: application/vnd.github+json' \
            -u ${{ secrets.PAT }} \
            --data '{"event_type": "dispatch-validation;'${{ env.short_repo }}';'${{ env.user_branch }}'", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'","ref": "'"$GITHUB_REF"'" }}'
- 
