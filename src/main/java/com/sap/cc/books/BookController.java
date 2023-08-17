@@ -36,10 +36,10 @@ public class BookController {
 
   @PostMapping
   public ResponseEntity<Book> addBook(@RequestBody Book book) throws URISyntaxException {
+    Book newBook=createdBook(null, book.getAuthor());
     UriComponents uriComponents = UriComponentsBuilder
       .fromPath("/api/v1/books" + "/{id}")
-      .buildAndExpand(book.getId());
-    Book newBook=createdBook(book.getId(), book.getAuthor());
+      .buildAndExpand(newBook.getId());
     URI locationHeaderUri = new URI(uriComponents.getPath());
     return ResponseEntity.created(locationHeaderUri).body(newBook);
   }
@@ -48,7 +48,7 @@ public class BookController {
     Book book=new Book();
     book.setId(id);
     book.setAuthor(author);
-    bookStorage.save(book);
+    book=bookStorage.save(book);
     return book;
   }
 

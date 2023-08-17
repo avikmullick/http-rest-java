@@ -44,7 +44,7 @@ public class BookControllerTest {
 
   @Test
   public void addBook_returnsCreatedBook() throws Exception {
-    ResultActions resultActions=createBook(1l,"Avik");
+    ResultActions resultActions=createBook(null,"Avik");
     MockHttpServletResponse response = resultActions
       .andExpect(status().isCreated())
       .andReturn().getResponse();
