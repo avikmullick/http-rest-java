@@ -1,4 +1,4 @@
-package com.sap.cc.library;
+package com.sap.cc.library.book;
 
 import com.sap.cc.library.book.Book;
 import org.springframework.data.jpa.repository.JpaRepository;

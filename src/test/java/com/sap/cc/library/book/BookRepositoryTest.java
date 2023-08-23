@@ -1,6 +1,5 @@
 package com.sap.cc.library.book;
 
-import com.sap.cc.library.BookRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
